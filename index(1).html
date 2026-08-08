@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#b89be8">
+<title>My Daily Glow ✿</title>
+<style>
+:root{--bg:#f6f0ff;--card:#fffaff;--ink:#514461;--muted:#91849e;--lav:#ad91d8;--lav2:#e9ddfb;--lav3:#f2eaff;--good:#8f72bd;--line:#eadff5;--shadow:0 16px 45px #8c6ab51b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#f8f4ff,#eee5ff,#fbf8ff);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}.app{max-width:1050px;margin:auto;padding:18px 14px 45px}.hero,.panel,.card{background:#ffffffd9;backdrop-filter:blur(12px);border:1px solid #fff;border-radius:25px;box-shadow:var(--shadow)}
+.hero{padding:22px}.top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;flex-wrap:wrap}h1{margin:0;font-size:clamp(29px,5vw,43px);letter-spacing:-1.5px}.sub{color:var(--muted);margin:6px 0 0}.date{background:var(--lav3);padding:9px 12px;border-radius:14px;display:flex;gap:7px;align-items:center}.date input{border:0;background:transparent;color:var(--ink);outline:0}
+.stats{display:grid;grid-template-columns:1.4fr .8fr .8fr;gap:12px;margin-top:19px}.stat{background:#fff;border-radius:19px;padding:15px}.label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.big{font-size:26px;font-weight:800;margin-top:3px}.bar{height:9px;background:#eee6f7;border-radius:99px;margin-top:8px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#a789d1,#d2b9f4);transition:.35s}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}button{border:0;border-radius:12px;padding:9px 13px;background:var(--lav2);color:#5d4b70;font-weight:700;cursor:pointer}button.primary{background:var(--lav);color:white}button:hover{transform:translateY(-1px)}
+.tabs{display:flex;gap:8px;margin:18px 0 13px;overflow:auto}.tab{white-space:nowrap}.tab.active{background:var(--lav);color:#fff}
+.view{display:none}.view.active{display:block}.sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{padding:17px}.card h2{font-size:16px;margin:0 0 10px}.task{display:flex;align-items:center;gap:11px;padding:10px 8px;border-radius:14px;cursor:pointer}.task:hover{background:#faf6ff}.task input{position:absolute;opacity:0}.box{height:23px;width:23px;border:2px solid #cdb9e6;border-radius:8px;display:grid;place-items:center;background:#fff;flex:none}.box:after{content:"✓";color:#fff;transform:scale(0);transition:.15s}.task input:checked+.box{background:var(--lav);border-color:var(--lav)}.task input:checked+.box:after{transform:scale(1)}.task input:checked~span:last-child{text-decoration:line-through;color:#aaa0b0}
+.calendarHead{display:flex;justify-content:space-between;align-items:center;gap:10px}.month{font-size:20px;font-weight:800}.week,.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}.week div{text-align:center;font-size:11px;color:var(--muted)}.day{min-height:72px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:7px;cursor:pointer}.day.muted{opacity:.4}.day.today{outline:2px solid var(--lav)}.day.selected{background:var(--lav3)}.num{font-size:12px;font-weight:800}.dot{height:6px;background:#e9dffc;border-radius:9px;margin-top:10px}.dot.done{background:#a98bda}.daypct{font-size:10px;color:var(--muted);margin-top:4px}
+.history{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.history .item{background:#fff;border-radius:17px;padding:14px}.mini{height:8px;background:#eee7f6;border-radius:9px;overflow:hidden;margin-top:7px}.mini>i{display:block;height:100%;background:#b496dc}.moodrow{display:flex;gap:7px;margin-top:8px}.moodrow button{font-size:20px;padding:6px 9px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,120px);background:#574568;color:white;padding:11px 16px;border-radius:99px;box-shadow:var(--shadow);transition:.3s;z-index:10}.toast.show{transform:translate(-50%,0)}
+.empty{text-align:center;color:var(--muted);padding:25px}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:17px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.stats .stat:first-child{grid-column:1/-1}.sections,.history{grid-template-columns:1fr}.day{min-height:60px;padding:5px}.app{padding:10px 9px 35px}.hero{padding:17px;border-radius:21px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+ <div class="top"><div><h1>My Daily Glow ✿</h1><p class="sub">Tiny habits, big energy. One checkbox at a time 💜</p></div><label class="date">📅 <input id="date" type="date"></label></div>
+ <div class="stats">
+  <div class="stat"><div class="label">Today's progress</div><div class="big" id="pct">0%</div><div class="bar"><div class="fill" id="fill"></div></div><div class="sub" id="count">0 / 18 completed</div></div>
+  <div class="stat"><div class="label">Current streak 🔥</div><div class="big" id="streak">0 days</div><div class="sub">Complete every habit</div></div>
+  <div class="stat"><div class="label">Best streak 🏆</div><div class="big" id="best">0 days</div><div class="sub">Your personal best</div></div>
+ </div>
+ <div class="actions"><button class="primary" onclick="markAll()">✓ Mark all</button><button onclick="resetDay()">↺ Reset day</button><button onclick="go('calendar')">📅 Calendar</button><button onclick="go('history')">📈 History</button></div>
+</header>
+
+<nav class="tabs"><button id="tab-today" class="tab active" onclick="go('today')">☀️ Today</button><button id="tab-calendar" class="tab" onclick="go('calendar')">🗓️ Calendar</button><button id="tab-history" class="tab" onclick="go('history')">📊 History</button></nav>
+
+<section id="today" class="view active"><div class="sections" id="tasks"></div></section>
+
+<section id="calendar" class="view">
+ <div class="panel" style="padding:18px"><div class="calendarHead"><button onclick="changeMonth(-1)">←</button><div class="month" id="month"></div><button onclick="changeMonth(1)">→</button></div><div class="week"> <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div class="calgrid" id="calgrid"></div><p class="sub">Tap a date to open that day's checklist.</p></div>
+</section>
+
+<section id="history" class="view"><div class="panel" style="padding:18px"><h2 style="margin-top:0">Last 30 days ✨</h2><div id="historyList" class="history"></div></div></section>
+<div class="footer">Saved automatically on this device · Your private habit data stays in your browser 💜</div>
+</div>
+<div id="toast" class="toast">All done! ✨</div>
+
+<script>
+const groups=[
+["🌤️ Morning",["Brushing Morning","Varanda Clean","Watering Plants","Wake up by 6–7 AM","Morning Skincare"]],
+["💻 Work & Growth",["Work from Office","Learning"]],
+["🏋️ Fitness & Nutrition",["Gym","Protein Shake","Supplements — Omega 3, Calcium, Magnesium","Diet","2L Water Intake","No Junk"]],
+["🍳 Home",["Cooking","Washing Clothes"]],
+["🧴 Self Care",["Hair Care"]],
+["🌙 Night",["Night Skincare","Book Reading at Night","Brushing Night","Sleep by 10:30 PM"]]
+];
+const tasks=groups.flatMap(x=>x[1]), total=tasks.length;
+const $=id=>document.getElementById(id);
+let selected=new Date(), calendarMonth=new Date(selected.getFullYear(),selected.getMonth(),1);
+
+function key(d){return "glow_"+iso(d)}
+function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function today(){let d=new Date();d.setHours(0,0,0,0);return d}
+function read(d){return JSON.parse(localStorage.getItem(key(d))||"{}")}
+function write(d,data){localStorage.setItem(key(d),JSON.stringify(data))}
+function loadTasks(){
+ $("date").value=iso(selected);let saved=read(selected);
+ $("tasks").innerHTML=groups.map(([title,items])=>`<div class="card"><h2>${title}</h2>${items.map(item=>`<label class="task"><input type="checkbox" data-task="${esc(item)}" ${saved[item]?"checked":""}><span class="box"></span><span>${item}</span></label>`).join("")}</div>`).join("");
+ $("tasks").querySelectorAll("input").forEach(x=>x.addEventListener("change",saveTasks));updateStats();
+}
+function esc(s){return s.replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+function saveTasks(){
+ let data=read(selected);$("tasks").querySelectorAll("input").forEach(x=>data[x.dataset.task]=x.checked);write(selected,data);updateStats();renderCalendar();renderHistory();
+ if(dataDone(selected))toast("Perfect! Your day is complete 💜");
+}
+function dataDone(d){let x=read(d);return tasks.every(t=>x[t])}
+function completed(d){let x=read(d);return tasks.filter(t=>x[t]).length}
+function updateStats(){let n=completed(selected),p=Math.round(n/total*100);$("pct").textContent=p+"%";$("fill").style.width=p+"%";$("count").textContent=`${n} / ${total} completed`;let s=getStreak();$("streak").textContent=s+" day"+(s==1?"":"s");$("best").textContent=getBest()+" days"}
+function markAll(){let d=read(selected);tasks.forEach(t=>d[t]=true);write(selected,d);loadTasks();renderCalendar();renderHistory();toast("You did it! All habits checked ✨")}
+function resetDay(){localStorage.removeItem(key(selected));loadTasks();renderCalendar();renderHistory();toast("Today is reset 🌸")}
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1800)}
+function go(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$(v).classList.add("active");document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));$("tab-"+v).classList.add("active");if(v==="calendar")renderCalendar();if(v==="history")renderHistory()}
+$("date").addEventListener("change",e=>{let [y,m,d]=e.target.value.split("-").map(Number);selected=new Date(y,m-1,d);selected.setHours(0,0,0,0);calendarMonth=new Date(y,m-1,1);loadTasks()});
+
+function getStreak(){let d=today(),s=0;while(dataDone(d)){s++;d.setDate(d.getDate()-1)}return s}
+function getBest(){let best=0,run=0,d=today();for(let i=0;i<366;i++){if(dataDone(d))run++;else run=0;best=Math.max(best,run);d.setDate(d.getDate()-1)}return best}
+function changeMonth(n){calendarMonth.setMonth(calendarMonth.getMonth()+n);renderCalendar()}
+function renderCalendar(){
+ $("month").textContent=calendarMonth.toLocaleString(undefined,{month:"long",year:"numeric"});
+ let y=calendarMonth.getFullYear(),m=calendarMonth.getMonth(),first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),prev=new Date(y,m,0).getDate(),out="";
+ for(let i=0;i<42;i++){let num=i-first+1,dt,muted=false;if(num<1){dt=new Date(y,m-1,prev+num);muted=true}else if(num>days){dt=new Date(y,m+1,num-days);muted=true}else dt=new Date(y,m,num);
+ let n=completed(dt),p=Math.round(n/total*100),cls=(iso(dt)===iso(today())?"today ":"")+(iso(dt)===iso(selected)?"selected ":"")+(muted?"muted":"");
+ out+=`<div class="day ${cls}" onclick="pickDate('${iso(dt)}')"><div class="num">${dt.getDate()}</div><div class="dot ${p===100?"done":""}"></div><div class="daypct">${n}/${total}</div></div>`;
+ }
+ $("calgrid").innerHTML=out;
+}
+function pickDate(s){let [y,m,d]=s.split("-").map(Number);selected=new Date(y,m-1,d);selected.setHours(0,0,0,0);calendarMonth=new Date(y,m-1,1);loadTasks();go("today")}
+function renderHistory(){
+ let out="",d=today();for(let i=0;i<30;i++){let n=completed(d),p=Math.round(n/total*100);out+=`<div class="item"><strong>${d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})}</strong><span style="float:right">${p}%</span><div class="mini"><i style="width:${p}%"></i></div><div class="sub">${n}/${total} habits completed</div></div>`;d.setDate(d.getDate()-1)}$("historyList").innerHTML=out;
+}
+loadTasks();renderCalendar();renderHistory();
+</script>
+</body>
+</html>
